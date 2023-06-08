@@ -24,7 +24,7 @@ class LoginActivity : AppCompatActivity() {
 
         val registertext: TextView = findViewById(R.id.goregister)
 
-        registertext.setOnClickListener{
+        registertext.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
@@ -36,13 +36,14 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+
     private fun performLogin() {
 
         val email: EditText = findViewById(R.id.emailkirjatuminen)
         val password: EditText = findViewById(R.id.salasanakirjautuminen)
 
-        if (email.text.isEmpty() || password.text.isEmpty()){
-            Toast.makeText(this, "Täytä tekstikentät",Toast.LENGTH_SHORT)
+        if (email.text.isEmpty() || password.text.isEmpty()) {
+            Toast.makeText(this, "Täytä tekstikentät", Toast.LENGTH_SHORT)
                 .show()
             return
         }
@@ -52,30 +53,61 @@ class LoginActivity : AppCompatActivity() {
 
         auth.signInWithEmailAndPassword(emailInput, passwordInput)
             .addOnCompleteListener(this) { task ->
-                if(task.isSuccessful) {
+                if (task.isSuccessful) {
                     // Kirjautuminen onnistui
 
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
 
-                    Toast.makeText(baseContext, "Kirjautuminen onnistui",
-                        Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        baseContext, "Kirjautuminen onnistui",
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
 
                 } else {
                     // Rekisteröinti epäonnistui
 
-                    Toast.makeText(baseContext, "Kirjautuminen epäonnistui",
-                        Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        baseContext, "Kirjautuminen epäonnistui",
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             }
-            .addOnFailureListener{
+            .addOnFailureListener {
                 Toast.makeText(this, "Error occured ${it.localizedMessage}", Toast.LENGTH_SHORT)
                     .show()
             }
 
 
+    }
+    override fun onStart() {
+        super.onStart()
+
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            // User is already logged in
+            // Proceed to the main activity or perform other actions
+            navigateToMain()
+        } else {
+            // User is not logged in
+            // Redirect to the login activity
+
+
+        }
+    }
+    private fun navigateToMain() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
 
     }
+
+
+
 }
+
+
+
+
+
